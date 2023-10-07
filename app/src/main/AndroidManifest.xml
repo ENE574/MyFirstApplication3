@@ -21,13 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 声明 AddBookActivity -->
-        <activity
-            android:name=".AddBookActivity" />
-
-        <!-- 声明 ModifyBookActivity -->
-        <activity
-            android:name=".ModifyBookActivity" />
     </application>
 
 </manifest>
