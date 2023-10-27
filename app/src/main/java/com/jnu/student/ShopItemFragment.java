@@ -39,6 +39,7 @@ public class ShopItemFragment extends Fragment {
                         Bundle bundle=intent.getExtras();
                         String title= bundle.getString("title");
                         int position=bundle.getInt("position");
+                        shopItems.add(position, new ShopItem(title,R.drawable.book_no_name) );
                         new DataSaver().Save(this.getContext(),shopItems);
                         mainRecycleViewAdapter.notifyItemInserted(position);
                     }
@@ -86,19 +87,19 @@ public class ShopItemFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView=inflater.inflate(R.layout.fragment_shop_item, container, false);
         RecyclerView recyclerViewMain=rootView.findViewById(R.id.recycleview_main);
+
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewMain.setLayoutManager(linearLayoutManager);
         DataSaver dataSaver=new DataSaver();
         shopItems=dataSaver.Load(this.getContext());
         if(shopItems.size()==0) {
-            shopItems.add(new ShopItem("item 0", R.drawable.book_no_name));
+            shopItems.add(new ShopItem("item 0",  R.drawable.book_no_name));
         }
         mainRecycleViewAdapter= new MainRecycleViewAdapter(shopItems);
         recyclerViewMain.setAdapter(mainRecycleViewAdapter);
         return rootView;
     }
-
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId())
@@ -129,7 +130,6 @@ public class ShopItemFragment extends Fragment {
                         }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
                             }
                         }).create();
                 alertDialog.show();

@@ -1,8 +1,11 @@
 package com.jnu.student;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link BrowserFragment#newInstance} factory method to
@@ -47,33 +51,23 @@ public class BrowserFragment extends Fragment {
         webSettings.setJavaScriptEnabled(true);
         WebViewClient webViewClient = new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView wv, String url) {
-                if(url == null) return false;
-
-                try {
-                    if(url.startsWith("weixin://") //微信
-                            || url.startsWith("alipays://") //支付宝
-                            || url.startsWith("mailto://") //邮件
-                            || url.startsWith("tel://")//电话
-                            || url.startsWith("dianping://")//大众点评
-                        //其他自定义的scheme
-                    ) {
-                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivity(intent);
-                        return true;
-                    }
-                } catch (Exception e) { //防止crash (如果手机上没有安装处理某个scheme开头的url的APP, 会导致crash)
-                    return true;//没有安装该app时，返回true，表示拦截自定义链接，但不跳转，避免弹出上面的错误页面
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                //return super.shouldOverrideUrlLoading(view, url);
+                if (url.startsWith("http:")||url.startsWith("https:")||url.startsWith("ftp")){
+                    view.loadUrl(url);
+                    return true;
                 }
-
-                //处理http和https开头的url
-                wv.loadUrl(url);
-                return true;
+                else if (url.startsWith("scheme://")){
+                    Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                    return true;
+                }
+                return false;
             }
+
         };
         webView.setWebViewClient(webViewClient);
         webView.loadUrl("http://baidu.com");
         return rootView;
     }
 }
-
